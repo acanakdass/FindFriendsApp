@@ -20,10 +20,39 @@ namespace WebAPI.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
+        [HttpGet("getAll")]
         public IActionResult GetAll()
         {
             var result = _userService.GetAll();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [HttpGet("getById")]
+        public IActionResult GetById(int id)
+        {
+            var result = _userService.GetById(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
+
+
+        [HttpGet("searchByUsernameOrEmail")]
+        public IActionResult searchByUsernameOrEmail(string username)
+        {
+            Console.WriteLine(username);
+            if (username == null)
+            {
+                var res = _userService.GetAll();
+                return Ok(res);
+            }
+            var result = _userService.SearchUserByUsername(username.ToLower());
             if (result.Success)
             {
                 return Ok(result);
@@ -66,6 +95,16 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
+        [HttpGet("getCurrentUser")]
+        public IActionResult GetCurrentUser()
+        {
+            var result = _userService.GetCurrentUser();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
 
         //// DELETE api/users/5
         //[HttpPut("{userId}")]
