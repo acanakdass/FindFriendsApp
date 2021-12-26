@@ -4,6 +4,7 @@ using System.Text;
 using Core.Entities.Concrete;
 using Core.Utilities.Results.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Abstract
 {
@@ -16,5 +17,7 @@ namespace Business.Abstract
         IDataResult<User> GetById(int id);
         IDataResult<User> GetCurrentUser();
         IDataResult<List<User>> SearchUserByUsername(string username);
+        IDataResult<List<UserWithLocationDto>> GetAllUsersWithLocations();
+        IDataResult<UserWithLocationDto> GetUserWithLocation(int userId);
     }
 }

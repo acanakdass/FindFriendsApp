@@ -8,6 +8,7 @@ using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -75,15 +76,15 @@ namespace Business.Concrete
             return new SuccessDataResult<List<User>>(requestingUsers);
         }
 
-        public IDataResult<List<User>> GetAllFriendsByUserId(int userId)
+        public IDataResult<List<UserWithLocationDto>> GetAllFriendsByUserId(int userId)
         {
             var result = _friendsDal.GetAll(f => (f.User1Id == userId && f.IsAccepted) || (f.User2Id == userId && f.IsAccepted));
-            var friends = new List<User>();
+            var friends = new List<UserWithLocationDto>();
             foreach (var friend in result)
             {
                 if (friend.User1Id == userId)
                 {
-                    var user = _userService.GetById(friend.User2Id);
+                    var user = _userService.GetUserWithLocation(friend.User2Id);
                     if (user.Success)
                     {
                       friends.Add(user.Data);
@@ -91,14 +92,14 @@ namespace Business.Concrete
                 }
                 else
                 {
-                    var user = _userService.GetById(friend.User1Id);
+                    var user = _userService.GetUserWithLocation(friend.User1Id);
                     if (user.Success)
                     {
                       friends.Add(user.Data);
                     }
                 }
             }
-            return new SuccessDataResult<List<User>>(friends);
+            return new SuccessDataResult<List<UserWithLocationDto>>(friends);
         }
 
         public IDataResult<Friends> GetById(int id)

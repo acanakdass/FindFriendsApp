@@ -12,6 +12,7 @@ namespace Business.Abstract
         IResult Add(Location location);
         IResult Update(Location location);
         IResult Delete(Location location);
+        IResult CreateOrUpdate(Location location);
     }
 }
 

@@ -10,6 +10,8 @@ using DataAccess.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
+using Entities.DTOs;
+
 namespace Business.Concrete
 {
     public class UserManager:IUserService
@@ -35,6 +37,16 @@ namespace Business.Concrete
         {
             var users =_userDal.GetAll();
             return new SuccessDataResult<List<User>>(users, Messages.Listed);
+        }
+
+        public IDataResult<List<UserWithLocationDto>> GetAllUsersWithLocations()
+        {
+            var result = _userDal.GetUsersWithLocation();
+            if (result.Any())
+            {
+                return new SuccessDataResult<List<UserWithLocationDto>>(result, Messages.Listed);
+            }
+            return new ErrorDataResult<List<UserWithLocationDto>>(Messages.NotFound);
         }
 
         public IDataResult<User> GetById(int id)
@@ -79,6 +91,16 @@ namespace Business.Concrete
             }
             return new ErrorDataResult<User>(Messages.UserNotFound);
             //return new ErrorDataResult<IEnumerable<ClaimsIdentity>>(null,Messages.NotFound);
+        }
+
+        public IDataResult<UserWithLocationDto> GetUserWithLocation(int userId)
+        {
+            var result = _userDal.GetUsersWithLocation(u => u.Id == userId);
+            if (result.Any())
+            {
+                return new SuccessDataResult<UserWithLocationDto>(result.FirstOrDefault(), Messages.Listed);
+            }
+            return new ErrorDataResult<UserWithLocationDto>(Messages.NotFound);
         }
 
         public IDataResult<List<User>> SearchUserByUsername(string username)

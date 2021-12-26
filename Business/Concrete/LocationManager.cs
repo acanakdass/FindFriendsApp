@@ -24,6 +24,19 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Added);
         }
 
+        public IResult CreateOrUpdate(Location location)
+        {
+            var locationData = _locationDal.Get(l => l.UserId == location.UserId);
+            if(locationData==null)
+            {
+                return this.Add(location);
+            }else
+            {
+                location.Id = locationData.Id;
+                return this.Update(location);
+            }
+        }
+
         public IResult Delete(Location location)
         {
             _locationDal.Delete(location);
@@ -38,7 +51,12 @@ namespace Business.Concrete
 
         public IDataResult<Location> GetById(int id)
         {
-            return new SuccessDataResult<Location>(_locationDal.Get(l => l.Id == id));
+            var result = _locationDal.Get(l => l.Id == id);
+            if (result == null)
+            {
+                return new ErrorDataResult<Location>(Messages.NotFound);
+            }
+            return new SuccessDataResult<Location>(result,Messages.Listed);
         }
 
         public IResult Update(Location location)

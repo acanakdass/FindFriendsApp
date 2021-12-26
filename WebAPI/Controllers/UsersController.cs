@@ -46,7 +46,7 @@ namespace WebAPI.Controllers
         [HttpGet("searchByUsernameOrEmail")]
         public IActionResult searchByUsernameOrEmail(string username)
         {
-            Console.WriteLine(username);
+            
             if (username == null)
             {
                 var res = _userService.GetAll();
@@ -58,6 +58,26 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return BadRequest(result.Message);
+        }
+
+        [HttpGet("getUserWithLocation")]
+        public IActionResult getUserWithLocation(int id)
+        {
+
+            var result = _userService.GetUserWithLocation(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
+
+
+        [HttpGet("getAllUsersWithLocations")]
+        public IActionResult getAllUsersWithLocations()
+        {
+            var result = _userService.GetAllUsersWithLocations();
+                return Ok(result);
         }
 
         //[HttpGet("getCurrentUser")]

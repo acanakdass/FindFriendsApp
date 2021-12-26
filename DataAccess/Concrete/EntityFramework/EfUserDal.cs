@@ -6,6 +6,8 @@ using DataAccess.Abstract;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Entities.DTOs;
+using System.Linq.Expressions;
 
 namespace DataAccess.Concrete.EntityFramework
 {
@@ -30,6 +32,30 @@ namespace DataAccess.Concrete.EntityFramework
             return result.ToList();
          }
       }
+
+        public List<UserWithLocationDto> GetUsersWithLocation(Expression<Func<UserWithLocationDto, bool>> filter = null)
+        {
+            using (LocatorContext context = new LocatorContext())
+            {
+                var result = from user in context.Users
+                             join location in context.Locations on user.Id equals location.UserId
+                             select new UserWithLocationDto
+                             {
+                                 Id = user.Id,
+                                 Email=user.Email,
+                                 FirstName=user.FirstName,
+                                 LastName=user.LastName,
+                                 Username=user.Username,
+                                 Status=user.Status,
+                                 Location=location
+                             };
+                if (filter == null)
+                {
+                    return result.ToList();
+                }
+                return result.Where(filter).ToList();
+            }
+        }
 
         //public User GetCurrentUser()
         //{

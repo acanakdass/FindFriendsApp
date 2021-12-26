@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.Entities.Concrete;
 using Core.Utilities.Results.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Abstract
 {
@@ -16,7 +17,7 @@ namespace Business.Abstract
         IResult SendFriendRequest(int userSenderId,int userReceiverId);
         IResult AcceptFriendRequest(int userSenderId,int userReceiverId);
         IResult RemoveFriend(int userSenderId,int userReceiverId);
-        IDataResult<List<User>>GetAllFriendsByUserId(int userId);
+        IDataResult<List<UserWithLocationDto>>GetAllFriendsByUserId(int userId);
         IDataResult<List<User>>GetAllFriendRequests(int userId);
         IResult CheckIfFriendRequestAlreadySent(int userSenderId,int userReceiverId);
     }
