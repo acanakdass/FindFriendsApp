@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Core.Entities.Concrete;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -78,6 +79,15 @@ namespace WebAPI.Controllers
         {
             var result = _userService.GetAllUsersWithLocations();
                 return Ok(result);
+        }
+
+        [HttpPost("uploadImage")]
+        public IActionResult UploadImage([FromForm(Name = ("Image"))] IFormFile file, [FromForm(Name =("UserId"))] int userId)
+        {
+            var result = _userService.UploadUserImage(file, userId);
+            
+                return Ok(result);
+            
         }
 
         //[HttpGet("getCurrentUser")]

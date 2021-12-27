@@ -5,6 +5,7 @@ using Core.Entities.Concrete;
 using Core.Utilities.Results.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using Microsoft.AspNetCore.Http;
 
 namespace Business.Abstract
 {
@@ -19,5 +20,7 @@ namespace Business.Abstract
         IDataResult<List<User>> SearchUserByUsername(string username);
         IDataResult<List<UserWithLocationDto>> GetAllUsersWithLocations();
         IDataResult<UserWithLocationDto> GetUserWithLocation(int userId);
+        IDataResult<string> UploadUserImage(IFormFile formFile,int userId);
+
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Entities.DTOs;
+using Core.Utilities.Helpers.Abstract;
 
 namespace Business.Concrete
 {
@@ -18,13 +19,13 @@ namespace Business.Concrete
     {
         IUserDal _userDal;
         private IHttpContextAccessor _httpContextAccessor;
+        private IImageHelper _imageHelper;
 
-
-        public UserManager(IUserDal userDal)
+        public UserManager(IUserDal userDal, IImageHelper imageHelper)
         {
             _userDal = userDal;
             _httpContextAccessor = ServiceTool.ServiceProvider.GetService<IHttpContextAccessor>();
-
+            _imageHelper = imageHelper;
         }
 
         public IResult Add(User user)
@@ -107,6 +108,26 @@ namespace Business.Concrete
         {
             var result = _userDal.GetAll(u => u.Email.ToLower().Contains(username)|| u.FirstName.ToLower().Contains(username) || u.Username.ToLower().Contains(username));
             return new SuccessDataResult<List<User>>(result,Messages.Listed);
+        }
+
+        public IDataResult<string> UploadUserImage(IFormFile formFile, int userId)
+        {
+            var result = _imageHelper.Upload(formFile);
+            if (result.Success)
+            {
+                var user = this.GetById(userId);
+                if(user.Success)
+                {
+                    user.Data.ImagePath = result.Data;
+                    _userDal.Update(user.Data);
+                    return new SuccessDataResult<string>(Messages.ImageUploaded);
+                }
+                else
+                {
+                    return new ErrorDataResult<string>(Messages.UserNotFound);
+                }
+            }
+            return new ErrorDataResult<string>(Messages.ImageUploadError);
         }
         //public IDataResult<User> GetCurrentUser()
         //{

@@ -12,5 +12,6 @@ namespace Core.Entities.Concrete
         public byte[] PasswordHash { get; set; }
         public bool Status { get; set; }
         public int LocationId { get; set; }
+        public string ImagePath { get; set; }
     }
 }

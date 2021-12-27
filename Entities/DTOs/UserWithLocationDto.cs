@@ -12,6 +12,7 @@ namespace Entities.DTOs
         public string Email { get; set; }
         public bool Status { get; set; }
         public Location Location { get; set; }
+        public string ImagePath { get; set; }
     }
 }
 

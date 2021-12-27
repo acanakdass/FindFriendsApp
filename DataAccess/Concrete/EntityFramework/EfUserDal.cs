@@ -47,7 +47,8 @@ namespace DataAccess.Concrete.EntityFramework
                                  LastName=user.LastName,
                                  Username=user.Username,
                                  Status=user.Status,
-                                 Location=location
+                                 Location=location,
+                                 ImagePath=user.ImagePath                                 
                              };
                 if (filter == null)
                 {
